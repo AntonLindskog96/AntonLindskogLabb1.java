@@ -2,7 +2,8 @@
 
 package sw.iths;
 
-import java.util.Random;
+import java.sql.Time;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Labb {
@@ -39,8 +40,7 @@ public class Labb {
                 avgPrice();
             }
             if (input.equals("3")) {
-                bubbleSort(prices);
-                sortPrice();
+                sortPrice(bubbleSort());
             }
             if (input.equals("4")) {
                 compareTime4h();
@@ -117,36 +117,36 @@ public class Labb {
 
     }
 
-    public static void sortPrice() {
-        for (int i = 0; i < prices.length; i++) {
+    public static void sortPrice(TimePrice[] sorted) {
+        for (int i = 0; i < sorted.length; i++) {
 
-            System.out.println("Mellan kl: " + printHour(prices[i].getTime()) + " Kostar det: " + prices[i].getPrice() + " öre per kWh");
+            System.out.println("Mellan kl: " + printHour(sorted[i].getTime()) + " Kostar det: " + sorted[i].getPrice() + " öre per kWh");
         }
     }
 
-    public static void bubbleSort(TimePrice[] prices) {
+    public static TimePrice[] bubbleSort() {
+        TimePrice[] sortedArray = Arrays.copyOf(prices,24);
         boolean bubbleSort = true;
         while (bubbleSort) {
             bubbleSort = false;
-            for (int i = 0; i < prices.length - 1; i++) {
-                for (int j = i; j < prices.length - 1; j++) {
-                    if (prices[i].getPrice() > prices[j + 1].getPrice()) {
+            for (int i = 0; i < sortedArray.length - 1; i++) {
+                for (int j = i; j < sortedArray.length - 1; j++) {
+                    if (sortedArray[i].getPrice() > sortedArray[j + 1].getPrice()) {
 
-                        TimePrice temp = prices[j + 1];
-                        prices[j + 1] = prices[i];
-                        prices[i] = temp;
+                        TimePrice temp = sortedArray[j + 1];
+                        sortedArray[j + 1] = sortedArray[i];
+                        sortedArray[i] = temp;
                         bubbleSort = true;
                     }
                 }
 
             }
         }
-
+        return sortedArray;
     }
 
 
     public static void compareTime4h() {
-
 
         int lowestPrice = Integer.MAX_VALUE;
         int time = 0;
@@ -154,7 +154,7 @@ public class Labb {
 
         for (int i = 0; i < prices.length - 3; i++) {
             if (lowestPrice > prices[i].getPrice() + prices[i + 1].getPrice() + prices[i + 2].getPrice() + prices[i + 3].getPrice()) {
-                time = i;
+                time = prices[i].getTime();
                 lowestPrice = prices[i].getPrice() + prices[i + 1].getPrice() + prices[i + 2].getPrice() + prices[i + 3].getPrice();
 
                 sum = lowestPrice;
